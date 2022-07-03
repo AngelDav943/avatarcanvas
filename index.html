@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<meta content="¡avatarurl" property="og:image" />
+	</head>
+
+	<body>
+		<img src="¡avatarurl" id="preview">
+
+		
+		<div>
+			<input type="checkbox" id="h1" name="cone" value="1">
+			<label for="cone"> Cone </label><br>
+			<input type="checkbox" id="h2" name="default_face" value="2">
+			<label for="default_face"> Default Face</label><br>
+			<input type="checkbox" id="h3" name="sunglasses" value="3">
+			<label for="sunglasses"> Sunglasses</label><br>
+
+			<script>
+				var preview = document.getElementById("preview");
+				var checkboxes = []
+				for (let n = 1; n <= 3; n++) {
+					console.log("h"+n)
+					checkboxes.push(document.getElementById("h"+n));
+				}
+				
+				function apply() {
+					var list = ""
+					for (let n = 0; n < checkboxes.length; n++) {
+						if (checkboxes[n].checked) list = list + "," + checkboxes[n].value
+					}
+					preview.src = "https://canvastest.angeldc943.repl.co/image?hats=" + list.substring(1)
+				}
+			</script>
+			
+			<input type="button" value="apply" onclick="apply()">
+		</div>
+	</body>
+</html>

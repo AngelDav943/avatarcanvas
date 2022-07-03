@@ -75,7 +75,7 @@ app.get('/image', async (req, res) => {
 		
 	res.writeHead(200,{"Content-Type": "image/png"});
 	res.end(canvas.toBuffer("image/png"));
-	save()
+	//save()
 })//*/
 
 app.listen(3000, () => {

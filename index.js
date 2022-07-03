@@ -24,11 +24,11 @@ app.get('/image', async (req, res) => {
 	console.log(hatdata[0])
 
 	var offset = [0,0]
-	var zoom = 0
+	var zoom = 1
 	const width = 350;
 	const height = 350;
 	if (req.query.offset) offset = req.query.offset.split(",")
-	if (req.query.zoom) zoom = parseInt(req.query.zoom)
+	if (req.query.zoom) zoom = parseFloat(req.query.zoom)
 	
 	const canvas = canvaslib.createCanvas(width, height)
 	const context = canvas.getContext('2d')
@@ -42,7 +42,7 @@ app.get('/image', async (req, res) => {
 
 	// load head
 	var headimg = await canvaslib.loadImage('./assets/head.png')		
-	context.drawImage(headimg, parseInt(offset[0]), parseInt(offset[1]), width*(1+zoom), height*(1+zoom));
+	context.drawImage(headimg, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
 
 	// load hats
 	var hats = req.query.hats.split(",")
@@ -61,7 +61,7 @@ app.get('/image', async (req, res) => {
 	
 	for (var i = 0; i < hat_toload.length; i++) {
 		var image = await canvaslib.loadImage(hat_toload[i].url) // load image
-		context.drawImage(image, parseInt(offset[0]), parseInt(offset[1]), width*(1+zoom), height*(1+zoom));
+		context.drawImage(image, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
 	}
 	
 	async function save() {

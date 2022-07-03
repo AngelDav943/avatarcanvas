@@ -8,13 +8,11 @@ const canvaslib = require('@napi-rs/canvas')
 app.use('/assets', express.static('assets'));
 
 app.get('/', (req, res) => {
-	var imageurl = 'https://canvastest.angeldc943.repl.co/image?hats='+req.query.hats
-	//res.send(`<meta content=${imageurl}" property="og:image" /><img src="${imageurl}">`);
+	var imageurl = "https://canvastest.angeldc943.repl.co/assets/simple.png"
+	if (!req.query.disabled) imageurl = 'https://canvastest.angeldc943.repl.co/image?hats='+req.query.hats
 
 	var htmlpage = fs.readFileSync('./index.html').toString();
-	htmlpage = htmlpage.replace(/¡avatarurl/g, imageurl)
-
-	//console.log(htmlpage)
+	htmlpage = htmlpage.replace(/¡avatarurl/g, imageurl);
 	
 	res.send(htmlpage);
 })
@@ -67,7 +65,7 @@ app.get('/image', async (req, res) => {
 	async function save() {
 		const pngData = await canvas.encode('png') // JPEG and WebP is also supported
 		// encoding in libuv thread pool, non-blocking
-		fs.writeFile(join(__dirname, 'simple.png'), pngData, err => {
+		fs.writeFile(join(__dirname, './assets/simple.png'), pngData, err => {
 			if (err) console.log(err)
 		})
 	}

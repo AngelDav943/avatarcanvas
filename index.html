@@ -1,13 +1,41 @@
 <html>
 	<head>
 		<meta content="¡avatarurl" property="og:image" />
+		<style>
+			body {
+				background-color:#131417;
+				color: white;
+				display:flex;
+    			flex-direction: column;
+			}
+			.options {
+				width:100%;
+				zoom:300%;
+			}
+			.options input[type="button"]{
+				width:100%;
+			}
+			
+			@media screen and (max-width: 690px) {
+				body {
+					flex-direction: row;
+				}
+				.options {
+					zoom:200%;
+				}
+				.options input[type="button"]{
+					width:auto;
+				}
+			}
+		</style>
 	</head>
 
 	<body>
+		
 		<img src="¡avatarurl" id="preview">
 
 		
-		<div>
+		<div class="options">
 			<input type="checkbox" id="h1" name="cone" value="1">
 			<label for="cone"> Cone </label><br>
 			<input type="checkbox" id="h2" name="default_face" value="2">
@@ -29,6 +57,7 @@
 						if (checkboxes[n].checked) list = list + "," + checkboxes[n].value
 					}
 					preview.src = "https://canvastest.angeldc943.repl.co/image?hats=" + list.substring(1)
+					history.replaceState({},"","?hats="+list.substring(1))
 				}
 			</script>
 			

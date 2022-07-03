@@ -8,17 +8,8 @@
 
 	<body>
 
-		<div class="display">
-			<div class="avatar">
-				<p>Current avatar:</p>
-				<img src="¡avatarurl" id="preview" style="aspect-ratio:1;">
-			</div>
-			<div class="preview">
-				<p>Live preview:</p>
-				<canvas id="canvas"></canvas>
-				<script src="https://canvastest.angeldc943.repl.co/assets/clientrenderer.js"></script>
-			</div>
-		</div>
+		<canvas id="canvas" style="height: fit-content;"></canvas>
+		<script src="https://canvastest.angeldc943.repl.co/assets/clientrenderer.js"></script>
 
 		
 		<div class="options">
@@ -54,15 +45,6 @@
 						if (checkboxes[n].checked) list = list + "," + checkboxes[n].value
 					}
 					if (ready) draw(list.substring(1))
-				}
-				
-				function apply() {
-					var list = ""
-					for (let n = 0; n < checkboxes.length; n++) {
-						if (checkboxes[n].checked) list = list + "," + checkboxes[n].value
-					}
-					preview.src = "https://canvastest.angeldc943.repl.co/image?hats=" + list.substring(1)
-					history.replaceState({},"","?hats="+list.substring(1))
 				}
 			</script>
 			

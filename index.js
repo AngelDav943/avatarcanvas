@@ -3,13 +3,19 @@ const app = express();
 const fs = require('fs');
 
 const { join } = require('path')
-const canvaslib = require('@napi-rs/canvas')
+const canvaslib = require('@napi-rs/canvas');
 
 app.use('/assets', express.static('assets'));
 
 app.get('/', (req, res) => {
 	var imageurl = "https://canvastest.angeldc943.repl.co/assets/simple.png"
-	if (!req.query.disabled) imageurl = 'https://canvastest.angeldc943.repl.co/image?hats='+req.query.hats
+	var query = ""
+	for (index in req.query) {
+		query = `${query}&${index}=${req.query[index]}`
+	}
+	if (query != "") query = "?" + query.substring(1)
+	
+	if (!req.query.disabled) imageurl = 'https://canvastest.angeldc943.repl.co/image'+query
 
 	var htmlpage = fs.readFileSync('./index.html').toString();
 	htmlpage = htmlpage.replace(/¡avatarurl/g, imageurl);
@@ -17,10 +23,17 @@ app.get('/', (req, res) => {
 	res.send(htmlpage);
 })
 
-app.get('/image', async (req, res) => {
-	const hatdata = JSON.parse(fs.readFileSync('./hats.json', 'utf8'));
-	console.log(hatdata[0])
+app.get('/client', (req, res) => {
+	var htmlpage = fs.readFileSync('./canvas.html').toString();
+	res.send(htmlpage);
+})
 
+// Avatar rendrerer
+app.get('/image', async (req, res) => {
+	const hatlimits = JSON.parse(fs.readFileSync('./assets/hatlimits.json', 'utf8'));
+	const hatdata = JSON.parse(fs.readFileSync('./assets/hats.json', 'utf8'));
+
+	var hats = []
 	var offset = [0,0]
 	var zoom = 1
 	const width = 350;
@@ -43,8 +56,7 @@ app.get('/image', async (req, res) => {
 	context.drawImage(headimg, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
 
 	// load hats
-	var hats = req.query.hats.split(",")
-	console.log(hats)
+	if (req.query.hats) hats = req.query.hats.split(",")
 	var hat_toload = []
 	for (var x = 0; x < hats.length; x++) {
 		var hat = hatdata[parseInt(hats[x])-1]
@@ -56,10 +68,19 @@ app.get('/image', async (req, res) => {
 	hat_toload.sort((a,b) =>{
 		return a.priority - b.priority
 	})
-	
+
+	var loaded = {}
 	for (var i = 0; i < hat_toload.length; i++) {
 		var image = await canvaslib.loadImage(hat_toload[i].url) // load image
-		context.drawImage(image, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
+		var hattype = hat_toload[i].type
+		loaded[hattype] = (loaded[hattype] ? loaded[hattype] : 0)
+		
+		if (loaded[hattype] < hatlimits[hattype].amount || hatlimits[hattype].limit == false) {
+			
+			context.drawImage(image, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
+			
+			loaded[hattype] += 1
+		}
 	}
 	
 	async function save() {

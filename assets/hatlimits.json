@@ -1,0 +1,21 @@
+{
+	"top":{
+		"limit":true,
+		"amount":1
+	},
+	"face":{
+		"limit":true,
+		"amount":1	
+	},
+	"front":{
+		"limit":true,
+		"amount":1
+	},
+	"ears":{
+		"limit":true,
+		"amount":1
+	},
+	"bottom":{
+		"limit":false
+	}
+}

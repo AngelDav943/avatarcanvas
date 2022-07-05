@@ -9,19 +9,47 @@ body {
 .options {
 	width: calc(100% - 40px);
 	zoom:100%;
+	margin:0px;
+	display:flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.options div {
 	margin:20px;
 }
 
-.options input[type="button"]{
+.display_container input[type="button"]{
 	width:100%;
+    padding: 10px;
+    background: #3fff13;
+    border: none;
+    cursor: pointer;
+}
+
+.display_container input[type="button"]:hover {
+	width:100%;
+    padding: 10px;
+    background: #00ff82;
+    padding: 5px;
+    background: #3fff13;
+    border: #00ff82;
+    border-width: 5px;
+    border-style: solid;
+}
+
+.display_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+	background: linear-gradient(225deg, #1e1e1e, #181a21);
+	width: calc(100% - 40px);
+	padding:20px;
 }
 
 .display {
-	background: linear-gradient(225deg, #1e1e1e, #181a21);
-	width: calc(100% - 40px);
 	display:flex;
     flex-direction: row;
-	padding:20px;
 }
 
 .display div {
@@ -31,6 +59,7 @@ body {
 .display p { 
     position: absolute;
 	text-align: center;
+	height:40%;
 	margin:0px;
 }
 
@@ -43,13 +72,18 @@ img {
     object-fit: cover;
 }
 
+
+
 @media only screen and (min-width: 690px) {
 	body {
 		flex-direction: row;
 	}
+
+	.display_container {
+		width: fit-content;
+	}
 	
 	.display {
-		width: fit-content;
    		flex-direction: column;
 	}
 

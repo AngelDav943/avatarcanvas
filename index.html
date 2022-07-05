@@ -7,44 +7,87 @@
 	</head>
 
 	<body>
-
-		<div class="display">
-			<div class="avatar">
-				<p>Current avatar:</p>
-				<img src="¡avatarurl" id="preview" style="aspect-ratio:1;">
+		<div class="display_container">
+			<div class="display">
+				<div class="avatar">
+					<!--<p>Current avatar:</p>-->
+					<img src="¡avatarurl" id="preview" style="aspect-ratio:1;">
+				</div>
+				<div class="preview">
+					<!--p>Live preview:</p>-->
+					<canvas id="canvas"></canvas>
+					<script src="https://canvastest.angeldc943.repl.co/assets/clientrenderer.js"></script>
+				</div>
 			</div>
-			<div class="preview">
-				<p>Live preview:</p>
-				<canvas id="canvas"></canvas>
-				<script src="https://canvastest.angeldc943.repl.co/assets/clientrenderer.js"></script>
-			</div>
+			<input type="button" value="apply" onclick="apply()">
 		</div>
 
 		
+		
 		<div class="options">
-			<input type="checkbox" id="h1" name="cone" value="1">
-			<label for="cone"> Cone </label><br>
-			<input type="checkbox" id="h2" name="default_face" value="2">
-			<label for="default_face"> Default Face</label><br>
-			<input type="checkbox" id="h3" name="sunglasses" value="3">
-			<label for="sunglasses"> Sunglasses</label><br>
-			<input type="checkbox" id="h4" name="headphones" value="4">
-			<label for="headphones"> Headphones</label><br>
-			<input type="checkbox" id="h5" name="hat" value="5">
-			<label for="hat"> hat</label><br>
-			<input type="checkbox" id="h6" name="scarf" value="6">
-			<label for="scarf"> scarf</label><br>
-			<input type="checkbox" id="h7" name="sad_face" value="7">
-			<label for="sad_face"> Sad Face</label><br>
+			<div id="accessories">
+				<input type="checkbox" id="h1" name="cone" value="1">
+				<label for="cone"> Cone </label><br>
+				<input type="checkbox" id="h2" name="default_face" value="2">
+				<label for="default_face"> Default Face</label><br>
+				<input type="checkbox" id="h3" name="sunglasses" value="3">
+				<label for="sunglasses"> Sunglasses</label><br>
+				<input type="checkbox" id="h4" name="headphones" value="4">
+				<label for="headphones"> Headphones</label><br>
+				<input type="checkbox" id="h5" name="hat" value="5">
+				<label for="hat"> hat</label><br>
+				<input type="checkbox" id="h6" name="scarf" value="6">
+				<label for="scarf"> scarf</label><br>
+				<input type="checkbox" id="h7" name="sad_face" value="7">
+				<label for="sad_face"> Sad Face</label><br>
+				<input type="checkbox" id="h8" name="top_hat" value="8">
+				<label for="top_hat">Top Hat</label><br>
+				<input type="checkbox" id="h9" name="lighthouse" value="9">
+				<label for="lighthouse">Lighthouse Hat</label><br>
+				<input type="checkbox" id="h10" name="dav_face" value="10">
+				<label for="dav_face">Dav face</label><br>
+				<input type="checkbox" id="h11" name="monocle" value="11">
+				<label for="monocle">Monocle</label><br>
+				<input type="checkbox" id="h12" name="batteryhat" value="12">
+				<label for="batteryhat">Battery hat</label><br>
+			</div>
+
+			<div id="post-edit">
+				<input name="zoom" id="zoom" type="range" min="1" max="30" value="10">
+				<label for="batteryhat">Zoom</label>
+
+				<p>Offset:</p>
+				<input name="offset_x" id="offset_x" type="float" value="0">
+				<label for="offset_x">pixels x</label><br>
+				<input name="offset_y" id="offset_y" type="float" value="0">
+				<label for="offset_y">pixels y</label><br>
+			</div>
 
 			<script>
 				//var preview = document.getElementById("preview");
+				var zoom_input = document.getElementById("zoom");
+				var inp_offset_x = document.getElementById("offset_x");
+				var inp_offset_y = document.getElementById("offset_y");
+
+				var offset_limits;
+				var offset_min;
+				var offset_max;
+				
+				function setoffsetlimits() {
+					offset_limits = (350/2) - ( (350*zoom_input.value) /2)
+					
+					offset_min = -Math.abs(offset_limits);
+					offset_max = Math.abs(offset_limits);
+				}
+
+				setoffsetlimits();
+				
 				var checkboxes = []
-				for (let n = 1; n <= 7; n++) {
+				for (let n = 1; n <= 12; n++) {
 					var checkbox = document.getElementById("h"+n);
 					checkboxes.push(checkbox);
 					checkbox.onchange = function() {
-						clientapply()
+						clientapply();
 					}
 				}
 				
@@ -53,20 +96,40 @@
 					for (let n = 0; n < checkboxes.length; n++) {
 						if (checkboxes[n].checked) list = list + "," + checkboxes[n].value
 					}
-					if (ready) draw(list.substring(1))
+					
+					setoffsetlimits();
+					var offset_x = Math.min(Math.max(parseFloat(inp_offset_x.value),offset_min),offset_max);
+					var offset_y = Math.min(Math.max(parseFloat(inp_offset_y.value),offset_min),offset_max);
+					
+					if (ready) draw(list.substring(1), [offset_x,offset_y], zoom_input.value/10 )
 				}
 				
 				function apply() {
-					var list = ""
+					var hatlist = ""
 					for (let n = 0; n < checkboxes.length; n++) {
-						if (checkboxes[n].checked) list = list + "," + checkboxes[n].value
+						if (checkboxes[n].checked) hatlist = hatlist + "," + checkboxes[n].value
 					}
-					preview.src = "https://canvastest.angeldc943.repl.co/image?hats=" + list.substring(1)
-					history.replaceState({},"","?hats="+list.substring(1))
+					var req_text = "?hats="+ hatlist.substring(1) +"&offset="+ offset_x.value +","+ offset_y.value +"&zoom="+ (zoom_input.value/10);
+					
+					preview.src = "https://canvastest.angeldc943.repl.co/image" + req_text;
+					history.replaceState({},"",req_text);
+				}
+
+				zoom_input.onchange = function() {
+					clientapply();
+					setoffsetlimits();
+				}
+
+				inp_offset_x.onchange = function() {
+					clientapply();
+				}
+
+				inp_offset_y.onchange = function() {
+					clientapply();
 				}
 			</script>
 			
-			<input type="button" value="apply" onclick="apply()">
+			
 		</div>
 	</body>
 </html>

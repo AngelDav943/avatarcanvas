@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const cors = require('cors');
 
 const { join } = require('path')
 const canvaslib = require('@napi-rs/canvas');
 
+app.use(cors())
 app.use('/assets', express.static('assets'));
 
 app.get('/', (req, res) => {
@@ -53,7 +55,11 @@ app.get('/image', async (req, res) => {
 
 	// load head
 	var headimg = await canvaslib.loadImage('./assets/head.png')		
-	context.drawImage(headimg, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
+	context.drawImage(headimg,
+		parseInt(offset[0]) + ((width/2)  - ((width*zoom) /2) ),
+		parseInt(offset[1]) + ((height/2) - ((height*zoom)/2) ),
+		width*(zoom), height*(zoom)
+	);
 
 	// load hats
 	if (req.query.hats) hats = req.query.hats.split(",")
@@ -71,13 +77,14 @@ app.get('/image', async (req, res) => {
 
 	var loaded = {}
 	for (var i = 0; i < hat_toload.length; i++) {
-		var image = await canvaslib.loadImage(hat_toload[i].url) // load image
+		var image = await canvaslib.loadImage("https://canvastest.angeldc943.repl.co/assets/" + hat_toload[i].url) // load image
 		var hattype = hat_toload[i].type
 		loaded[hattype] = (loaded[hattype] ? loaded[hattype] : 0)
 		
 		if (loaded[hattype] < hatlimits[hattype].amount || hatlimits[hattype].limit == false) {
-			
-			context.drawImage(image, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
+			var pos_x = parseInt(offset[0]) + ((width/2)  - ((width*zoom)/2) );
+			var pos_y = parseInt(offset[1]) + ((height/2) - ((height*zoom)/2) );
+			context.drawImage(image, pos_x, pos_y, width*(zoom), height*(zoom));
 			
 			loaded[hattype] += 1
 		}

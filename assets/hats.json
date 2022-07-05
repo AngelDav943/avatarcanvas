@@ -1,58 +1,86 @@
 [
 	{
 		"name":"cone",
-		"url":"./assets/cone.png",
+		"url":"cone.png",
 		"priority":10,
 		"type":"top",
 		"id":1
 	},
 	{
 		"name":"default face",
-		"url":"./assets/face01.png",
+		"url":"face01.png",
 		"priority":0,
 		"type":"face",
 		"id":2
 	},
 	{
 		"name":"sunglasses",
-		"url":"./assets/sunglasses.png",
+		"url":"sunglasses.png",
 		"priority":3,
-		"type":"front",
+		"type":"eyes",
 		"id":3
 	},
 	{
 		"name":"headphones",
-		"url":"./assets/headphones.png",
+		"url":"headphones.png",
 		"priority":2,
 		"type":"ears",
 		"id":4
 	},
 	{
 		"name":"hat",
-		"url":"./assets/hat.png",
+		"url":"hat.png",
 		"priority":4,
 		"type":"top",
 		"id":5
 	},
 	{
 		"name":"scarf",
-		"url":"./assets/scarf.png",
+		"url":"scarf.png",
 		"priority":1,
 		"type":"bottom",
 		"id":6
 	},
 	{
 		"name":"sad face",
-		"url":"./assets/sadface.png",
+		"url":"sadface.png",
 		"priority":0,
 		"type":"face",
 		"id":7
 	},
 	{
-		"name":"computer",
-		"url":"./assets/computer.png",
-		"priority":1,
+		"name":"Top Hat",
+		"url":"tophat.png",
+		"priority":5,
 		"type":"top",
 		"id":8
+	},
+	{
+		"name":"Lighthouse Hat",
+		"url":"lighthouse.png",
+		"priority":5,
+		"type":"top",
+		"id":9
+	},
+	{
+		"name":"Dav face",
+		"url":"davface.png",
+		"priority":0,
+		"type":"face",
+		"id":10
+	},
+	{
+		"name":"Monocle",
+		"url":"monocle.png",
+		"priority":2,
+		"type":"eyes",
+		"id":11
+	},
+	{
+		"name":"Battery Hat",
+		"url":"batteryhat.png",
+		"priority":5,
+		"type":"top",
+		"id":12
 	}
 ]

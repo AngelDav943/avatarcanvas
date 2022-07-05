@@ -12,16 +12,20 @@ canvas.width = width;
 var loadedhats = {}
 var headimg
 
+var req_hatlimits;
+var req_hatdata;
+
 async function preload() {
-	const req_hatdata = await fetch('https://canvastest.angeldc943.repl.co/assets/hats.json');
+	req_hatdata = await fetch('https://canvastest.angeldc943.repl.co/assets/hats.json');
+	req_hatlimits = await fetch('https://canvastest.angeldc943.repl.co/assets/hatlimits.json');
 	const hatdata = await req_hatdata.json();
 	
 	headimg = new Image();
-	headimg.src = "./assets/head.png"
+	headimg.src = "https://canvastest.angeldc943.repl.co/assets/head.png"
 
 	for (var i = 0; i < hatdata.length; i++) {
 		var img = new Image();
-		img.src = hatdata[i].url
+		img.src = "https://canvastest.angeldc943.repl.co/assets/" + hatdata[i].url
 		loadedhats[hatdata[i].id] = img
 	}
 
@@ -31,14 +35,14 @@ async function preload() {
 
 preload()
 
-async function draw(hatlist,offset,zoom) {
+async function draw(hatlist,req_offset,req_zoom) {
 	
 	context.font = "25px Arial";
 	context.fillStyle = "white";
 	context.fillText("Loading", 20, 50);
 	
-	const req_hatlimits = await fetch('https://canvastest.angeldc943.repl.co/assets/hatlimits.json');
-	const req_hatdata = await fetch('https://canvastest.angeldc943.repl.co/assets/hats.json');
+	if (req_hatlimits) req_hatlimits = await fetch('https://canvastest.angeldc943.repl.co/assets/hatlimits.json');
+	if (req_hatdata) req_hatdata = await fetch('https://canvastest.angeldc943.repl.co/assets/hats.json');
 		
 	const hatlimits = await req_hatlimits.json();
 	const hatdata = await req_hatdata.json();
@@ -46,8 +50,8 @@ async function draw(hatlist,offset,zoom) {
 	var hats = []
 	var offset = [0,0]
 	var zoom = 1
-	if (offset) offset = String(offset).split(",")
-	if (zoom) zoom = parseFloat(String(zoom))
+	if (req_offset) offset = String(req_offset).split(",")
+	if (req_zoom) zoom = parseFloat(String(req_zoom))
 	
 	// Create background
 	var grd = context.createLinearGradient(0, -height, 0, height*2);
@@ -61,7 +65,10 @@ async function draw(hatlist,offset,zoom) {
 
 	async function imageonload(img)
 	{
-		context.drawImage(img, parseInt(offset[0]), parseInt(offset[1]), width*(zoom), height*(zoom));
+		var pos_x = parseInt(offset[0]) + ((width/2)  - ((width*zoom)/2) );
+		var pos_y = parseInt(offset[1]) + ((height/2) - ((height*zoom)/2) );
+		console.log(`position: ${pos_x}, ${pos_y}`)
+		context.drawImage(img, pos_x, pos_y, width * zoom, height * zoom);
 	}
 	
 	// load hats

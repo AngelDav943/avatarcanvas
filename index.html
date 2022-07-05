@@ -25,6 +25,18 @@
 		
 		
 		<div class="options">
+			<div id="post-edit">
+				<input name="zoom" id="zoom" type="range" min="1" max="30" value="10">
+				<input name="zoom" id="zoom_float" type="number" value="1" style="width: 80px;">
+				<label for="zoom"> zoom</label>
+
+				<p>Offset:</p>
+				<input name="offset_x" id="offset_x" type="number" value="0">
+				<label for="offset_x">pixels x</label><br>
+				<input name="offset_y" id="offset_y" type="number" value="0">
+				<label for="offset_y">pixels y</label><br>
+			</div>
+			
 			<div id="accessories">
 				<input type="checkbox" id="h1" name="cone" value="1">
 				<label for="cone"> Cone </label><br>
@@ -51,21 +63,12 @@
 				<input type="checkbox" id="h12" name="batteryhat" value="12">
 				<label for="batteryhat">Battery hat</label><br>
 			</div>
-
-			<div id="post-edit">
-				<input name="zoom" id="zoom" type="range" min="1" max="30" value="10">
-				<label for="batteryhat">Zoom</label>
-
-				<p>Offset:</p>
-				<input name="offset_x" id="offset_x" type="float" value="0">
-				<label for="offset_x">pixels x</label><br>
-				<input name="offset_y" id="offset_y" type="float" value="0">
-				<label for="offset_y">pixels y</label><br>
-			</div>
-
+			
 			<script>
 				//var preview = document.getElementById("preview");
 				var zoom_input = document.getElementById("zoom");
+				var zoomfloat = document.getElementById("zoom_float");
+				
 				var inp_offset_x = document.getElementById("offset_x");
 				var inp_offset_y = document.getElementById("offset_y");
 
@@ -116,6 +119,13 @@
 				}
 
 				zoom_input.onchange = function() {
+					zoomfloat.value = zoom_input.value / 10;
+					clientapply();
+					setoffsetlimits();
+				}
+
+				zoomfloat.onchange = function() {
+					zoom_input.value = zoomfloat.value * 10;
 					clientapply();
 					setoffsetlimits();
 				}

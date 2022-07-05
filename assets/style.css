@@ -19,6 +19,11 @@ body {
 	margin:20px;
 }
 
+.options input {
+	background:white;
+	color:black;
+}
+
 .display_container input[type="button"]{
 	width:100%;
     padding: 10px;

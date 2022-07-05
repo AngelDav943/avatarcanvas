@@ -15,6 +15,15 @@ var headimg
 var req_hatlimits;
 var req_hatdata;
 
+function draw_background() {
+	// Create background
+	var grd = context.createLinearGradient(0, -height, 0, height*2);
+	grd.addColorStop(0, "#1e1e1e");
+	grd.addColorStop(1, "#181a21");
+	context.fillStyle = grd;
+	context.fillRect(0, 0, width, height);
+}
+
 async function preload() {
 	req_hatdata = await fetch('https://canvastest.angeldc943.repl.co/assets/hats.json');
 	req_hatlimits = await fetch('https://canvastest.angeldc943.repl.co/assets/hatlimits.json');
@@ -30,7 +39,13 @@ async function preload() {
 	}
 
 	ready = true
-	draw()
+	draw_background();
+	
+	context.font = "25px Arial";
+	context.fillStyle = "white";
+	context.fillText("Loading", 20, 50);
+	
+	draw();
 }
 
 preload()
@@ -53,12 +68,7 @@ async function draw(hatlist,req_offset,req_zoom) {
 	if (req_offset) offset = String(req_offset).split(",")
 	if (req_zoom) zoom = parseFloat(String(req_zoom))
 	
-	// Create background
-	var grd = context.createLinearGradient(0, -height, 0, height*2);
-	grd.addColorStop(0, "#1e1e1e");
-	grd.addColorStop(1, "#181a21");
-	context.fillStyle = grd;
-	context.fillRect(0, 0, width, height);
+	draw_background();
 	
 	// load head
 	imageonload(headimg);
